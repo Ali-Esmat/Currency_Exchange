@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ExchangeApplication<exchange>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.exchange.exchange.ExchangeApplication",
+            "projectName": "exchange",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
