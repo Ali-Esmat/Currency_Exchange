@@ -1,6 +1,6 @@
 package com.exchange.exchange.dto;
 
-public class conversionRequest {
+public class ConversionRequest {
     private String from;
     private String to;
     private double amount;

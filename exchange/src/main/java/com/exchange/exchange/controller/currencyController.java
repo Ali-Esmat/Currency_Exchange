@@ -4,20 +4,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
-import com.exchange.exchange.service.currencyService;
-import com.exchange.exchange.dto.conversionRequest;
-import com.exchange.exchange.dto.conversionResponse;
+import com.exchange.exchange.service.CurrencyService;
+import com.exchange.exchange.dto.ConversionRequest;
+import com.exchange.exchange.dto.ConversionResponse;
 @RestController
 @RequestMapping("/api")
-public class currencyController {
-    private final currencyService currencyService;
-    public currencyController(currencyService currencyService){
+public class CurrencyController {
+    private final CurrencyService currencyService;
+    public CurrencyController(CurrencyService currencyService){
         this.currencyService = currencyService;
     }
 
     @PostMapping("/convert")
-    public conversionResponse convert(@RequestBody conversionRequest request){
-        double result = currencyService.convertCurrency(request.getFrom(), request.getTo(), request.getAmount());
-        return new conversionResponse(result);
+    public ConversionResponse convert(@RequestBody ConversionRequest request){
+        return currencyService.convertCurrency(request.getFrom(), request.getTo(), request.getAmount());
+
     }
 }
