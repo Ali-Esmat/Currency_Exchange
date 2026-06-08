@@ -9,6 +9,9 @@ import com.exchange.exchange.client.ExchangeRateClient;
 import com.exchange.exchange.dto.ConversionResponse;
 import com.exchange.exchange.dto.ExchangeRateResponse;
 import com.exchange.exchange.dto.UpdateConversionRequest;
+import com.exchange.exchange.exception.ConversionNotFoundException;
+import com.exchange.exchange.exception.UnsupportedCurrencyException;
+
 @Service
 public class CurrencyService {
     private final ConversionHistoryRepository repository;
@@ -24,12 +27,13 @@ public class CurrencyService {
     }
 
     public ConversionHistory getHistoryById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new RuntimeException("Conversion not found"));
+        return repository.findById(id).orElseThrow(() -> new ConversionNotFoundException(id));
     
     }
 
     public void deleteHistoryById(Long id){
-        repository.deleteById(id);
+        ConversionHistory history = repository.findById(id).orElseThrow(() -> new ConversionNotFoundException(id));
+        repository.delete(history);
     }
 
     public ConversionResponse convertCurrency(String from, String to, double amount){
@@ -51,11 +55,10 @@ public class CurrencyService {
             
             return new ConversionResponse(from, to, amount, rate, convertedAmount);
         } else 
-            throw new RuntimeException("Unsupported currency: " + to);
+            throw new UnsupportedCurrencyException(to);
     }
-
     public ConversionHistory updateHistory(Long id, UpdateConversionRequest request){
-        ConversionHistory history = repository.findById(id).orElseThrow(() -> new RuntimeException("Conversion not found"));
+        ConversionHistory history = repository.findById(id).orElseThrow(() -> new ConversionNotFoundException(id));
         history.setAmount(request.getAmount());
         history.setConvertedAmount(request.getAmount() * history.getRate());
         return repository.save(history);
