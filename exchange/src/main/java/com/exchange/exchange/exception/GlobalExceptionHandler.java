@@ -2,12 +2,19 @@ package com.exchange.exchange.exception;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.http.ResponseEntity;
 import com.exchange.exchange.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentials(BadCredentialsException ex) {
+        ErrorResponse error = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), "Invalid email or password");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
+    }
+
     @ExceptionHandler(ConversionNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleConversionNotFound(ConversionNotFoundException ex){
         ErrorResponse error = new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
