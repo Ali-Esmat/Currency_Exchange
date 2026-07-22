@@ -1,11 +1,14 @@
 package com.exchange.exchange.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import com.exchange.exchange.dto.LoginRequest;
 import com.exchange.exchange.dto.RegisterRequest;
 import com.exchange.exchange.dto.RegisterResponse;
 import com.exchange.exchange.service.JwtService;
@@ -28,12 +31,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public RegisterResponse register(@RequestBody RegisterRequest request){
+    public RegisterResponse register(@Valid @RequestBody RegisterRequest request){
         return userService.registerUser(request);
     }
 
     @PostMapping("/login")
-    public Map<String, String> login(@RequestBody RegisterRequest request) {
+    public Map<String, String> login(@Valid @RequestBody LoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         String token = jwtService.generateToken(request.getEmail());
         return Map.of("token", token);

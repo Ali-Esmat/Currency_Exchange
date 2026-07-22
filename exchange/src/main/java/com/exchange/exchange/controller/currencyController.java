@@ -1,5 +1,6 @@
 package com.exchange.exchange.controller;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ public class CurrencyController {
     }
 
     @PostMapping("/convert")
-    public ConversionResponse convert(@RequestBody ConversionRequest request){
+    public ConversionResponse convert(@Valid @RequestBody ConversionRequest request){
         return currencyService.convertCurrency(request.getFrom(), request.getTo(), request.getAmount());
 
     }
@@ -46,7 +47,7 @@ public class CurrencyController {
 
     // for learning purposes only.
     @PutMapping("/history/{id}")
-    public ConversionHistory updateHistory(@PathVariable Long id, @RequestBody UpdateConversionRequest request){
+    public ConversionHistory updateHistory(@PathVariable Long id, @Valid @RequestBody UpdateConversionRequest request){
         return currencyService.updateHistory(id, request);
     }
 }
